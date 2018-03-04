@@ -3,7 +3,18 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://tasasei.github.io/mysite/posts/first-lda/</loc>
+    <lastmod>2018-03-04T21:18:53+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://tasasei.github.io/mysite/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://tasasei.github.io/mysite/posts/</loc>
+    <lastmod>2018-03-04T21:18:53+09:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -14,6 +25,7 @@
   
   <url>
     <loc>https://tasasei.github.io/mysite/</loc>
+    <lastmod>2018-03-04T21:18:53+09:00</lastmod>
     <priority>0</priority>
   </url>
   

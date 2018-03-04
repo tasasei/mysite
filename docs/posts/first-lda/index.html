@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="jp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    
+    <title>tasasei&#39;s site  | Rのldaの使い方</title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+
+    <meta name="viewport" content="width=device-width,minimum-scale=1">
+    <meta name="generator" content="Hugo 0.32.3" />
+    
+    
+      <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
+    
+
+    <link href='https://tasasei.github.io/mysite/dist/main.css' rel='stylesheet' type="text/css" />
+    
+      
+    
+
+    
+
+    <meta property="og:title" content="Rのldaの使い方" />
+<meta property="og:description" content="先日 lda の使い方を説明する機会があったので、その時書いたものを晒します。 大した量は無いですが、無断使用OKと一応書いておきます。
+ldaを実行する R が標準で内蔵するライブラリの1つ、MASS に含まれる線形判別を行う関数である lda に ついて説明を行います。動作確認に使うのは iris (アヤメ) データ。 これもデフォルトで R に入ってます。こんなデータ↓
+head(iris) ## Sepal.Length Sepal.Width Petal.Length Petal.Width Species ## 1 5.1 3.5 1.4 0.2 setosa ## 2 4.9 3.0 1.4 0.2 setosa ## 3 4.7 3.2 1.3 0.2 setosa ## 4 4.6 3.1 1.5 0.2 setosa ## 5 5.0 3.6 1.4 0.2 setosa ## 6 5.4 3.9 1.7 0.4 setosa unique(iris$Species) ## [1] setosa versicolor virginica  ## Levels: setosa versicolor virginica nrow(iris) ## [1] 150 2クラスに絞ったirisデータをこのままldaに入れてみます。 実行して、出てきた変数を確認します。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://tasasei.github.io/mysite/posts/first-lda/" />
+
+
+
+<meta property="article:published_time" content="2018-03-04T21:18:53&#43;09:00"/>
+
+<meta property="article:modified_time" content="2018-03-04T21:18:53&#43;09:00"/>
+
+
+
+
+
+
+
+
+
+
+
+<meta itemprop="name" content="Rのldaの使い方">
+<meta itemprop="description" content="先日 lda の使い方を説明する機会があったので、その時書いたものを晒します。 大した量は無いですが、無断使用OKと一応書いておきます。
+ldaを実行する R が標準で内蔵するライブラリの1つ、MASS に含まれる線形判別を行う関数である lda に ついて説明を行います。動作確認に使うのは iris (アヤメ) データ。 これもデフォルトで R に入ってます。こんなデータ↓
+head(iris) ## Sepal.Length Sepal.Width Petal.Length Petal.Width Species ## 1 5.1 3.5 1.4 0.2 setosa ## 2 4.9 3.0 1.4 0.2 setosa ## 3 4.7 3.2 1.3 0.2 setosa ## 4 4.6 3.1 1.5 0.2 setosa ## 5 5.0 3.6 1.4 0.2 setosa ## 6 5.4 3.9 1.7 0.4 setosa unique(iris$Species) ## [1] setosa versicolor virginica  ## Levels: setosa versicolor virginica nrow(iris) ## [1] 150 2クラスに絞ったirisデータをこのままldaに入れてみます。 実行して、出てきた変数を確認します。">
+
+
+<meta itemprop="datePublished" content="2018-03-04T21:18:53&#43;09:00" />
+<meta itemprop="dateModified" content="2018-03-04T21:18:53&#43;09:00" />
+<meta itemprop="wordCount" content="343">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Rのldaの使い方"/>
+<meta name="twitter:description" content="先日 lda の使い方を説明する機会があったので、その時書いたものを晒します。 大した量は無いですが、無断使用OKと一応書いておきます。
+ldaを実行する R が標準で内蔵するライブラリの1つ、MASS に含まれる線形判別を行う関数である lda に ついて説明を行います。動作確認に使うのは iris (アヤメ) データ。 これもデフォルトで R に入ってます。こんなデータ↓
+head(iris) ## Sepal.Length Sepal.Width Petal.Length Petal.Width Species ## 1 5.1 3.5 1.4 0.2 setosa ## 2 4.9 3.0 1.4 0.2 setosa ## 3 4.7 3.2 1.3 0.2 setosa ## 4 4.6 3.1 1.5 0.2 setosa ## 5 5.0 3.6 1.4 0.2 setosa ## 6 5.4 3.9 1.7 0.4 setosa unique(iris$Species) ## [1] setosa versicolor virginica  ## Levels: setosa versicolor virginica nrow(iris) ## [1] 150 2クラスに絞ったirisデータをこのままldaに入れてみます。 実行して、出てきた変数を確認します。"/>
+
+  </head>
+
+  <body class="ma0 avenir bg-near-white">
+
+    
+
+  <header>
+    <div class="bg-black">
+      <nav class="pv3 ph3 ph4-ns" role="navigation">
+  <div class="flex-l justify-between items-center center">
+    <a href="https://tasasei.github.io/mysite/" class="f3 fw2 hover-white no-underline white-90 dib">
+      tasasei&#39;s site
+    </a>
+    <div class="flex-l items-center">
+      
+      
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</nav>
+
+    </div>
+  </header>
+
+
+    <main class="pb7" role="main">
+      
+  <div class="flex-l mt2 mw8 center">
+    <article class="center cf pv5 ph3 ph4-ns mw7">
+      <header>
+        <p class="f6 b helvetica tracked">
+          POSTS
+        </p>
+        <h1 class="f1">
+          Rのldaの使い方
+        </h1>
+      </header>
+      <div class="nested-copy-line-height lh-copy f4 nested-links nested-img mid-gray">
+        
+
+<p>先日 lda の使い方を説明する機会があったので、その時書いたものを晒します。
+大した量は無いですが、無断使用OKと一応書いておきます。</p>
+
+<h1 id="ldaを実行する">ldaを実行する</h1>
+
+<p>R が標準で内蔵するライブラリの1つ、MASS に含まれる線形判別を行う関数である lda に
+ついて説明を行います。動作確認に使うのは iris (アヤメ) データ。
+これもデフォルトで R に入ってます。こんなデータ↓</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#66d9ef">head</span>(iris)
+<span style="color:#75715e">##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species</span>
+<span style="color:#75715e">## 1          5.1         3.5          1.4         0.2  setosa</span>
+<span style="color:#75715e">## 2          4.9         3.0          1.4         0.2  setosa</span>
+<span style="color:#75715e">## 3          4.7         3.2          1.3         0.2  setosa</span>
+<span style="color:#75715e">## 4          4.6         3.1          1.5         0.2  setosa</span>
+<span style="color:#75715e">## 5          5.0         3.6          1.4         0.2  setosa</span>
+<span style="color:#75715e">## 6          5.4         3.9          1.7         0.4  setosa</span>
+<span style="color:#66d9ef">unique</span>(iris<span style="color:#f92672">$</span>Species)
+<span style="color:#75715e">## [1] setosa     versicolor virginica </span>
+<span style="color:#75715e">## Levels: setosa versicolor virginica</span>
+<span style="color:#66d9ef">nrow</span>(iris)
+<span style="color:#75715e">## [1] 150</span></code></pre></div>
+<p>2クラスに絞ったirisデータをこのままldaに入れてみます。
+実行して、出てきた変数を確認します。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#f92672">library</span>(MASS)
+iris2 <span style="color:#f92672">&lt;-</span> iris[<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">100</span>,]
+iris2<span style="color:#f92672">$</span>Species <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">factor</span>(iris2<span style="color:#f92672">$</span>Species)
+
+mdl <span style="color:#f92672">&lt;-</span> lda(iris2[,<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">4</span>],iris2<span style="color:#f92672">$</span>Species)
+res <span style="color:#f92672">&lt;-</span> predict(mdl,iris2[<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">100</span>,<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">4</span>])
+
+<span style="color:#75715e">## 推定されたクラス。</span>
+<span style="color:#66d9ef">head</span>(res<span style="color:#f92672">$</span><span style="color:#66d9ef">class</span>)
+<span style="color:#75715e">## [1] setosa setosa setosa setosa setosa setosa</span>
+<span style="color:#75715e">## Levels: setosa versicolor</span>
+
+<span style="color:#75715e">## 線形判別の係数。入力ベクトルが4次元なので4係数。</span>
+<span style="color:#66d9ef">print</span>(mdl<span style="color:#f92672">$</span>scaling)
+<span style="color:#75715e">##                    LD1</span>
+<span style="color:#75715e">## Sepal.Length -0.300458</span>
+<span style="color:#75715e">## Sepal.Width  -1.773845</span>
+<span style="color:#75715e">## Petal.Length  2.142260</span>
+<span style="color:#75715e">## Petal.Width   3.035726</span>
+
+<span style="color:#75715e">## 係数 * 変数。0 が決定境界になるよう調整されている。</span>
+<span style="color:#75715e">## as.matrix(iris[,1:4]) %*% mdl$scaling に定数を加えたもの。</span>
+<span style="color:#66d9ef">head</span>(res<span style="color:#f92672">$</span>x)
+<span style="color:#75715e">##         LD1</span>
+<span style="color:#75715e">## 1 -5.508619</span>
+<span style="color:#75715e">## 2 -4.561605</span>
+<span style="color:#75715e">## 3 -5.070508</span>
+<span style="color:#75715e">## 4 -4.434626</span>
+<span style="color:#75715e">## 5 -5.655958</span>
+<span style="color:#75715e">## 6 -5.058471</span>
+
+<span style="color:#75715e">## 事後確率。</span>
+<span style="color:#66d9ef">head</span>(res<span style="color:#f92672">$</span>posterior)
+<span style="color:#75715e">##   setosa   versicolor</span>
+<span style="color:#75715e">## 1      1 4.927872e-25</span>
+<span style="color:#75715e">## 2      1 7.437990e-21</span>
+<span style="color:#75715e">## 3      1 4.225398e-23</span>
+<span style="color:#75715e">## 4      1 2.702481e-20</span>
+<span style="color:#75715e">## 5      1 1.102840e-25</span>
+<span style="color:#75715e">## 6      1 4.775094e-23</span>
+
+<span style="color:#75715e">## 事前確率。教師データに含まれる各クラスの割合で算出されるがlda や predict.lda の</span>
+<span style="color:#75715e">## 引数で与えることもできる。これとxを使って事後確率が計算される。</span>
+<span style="color:#66d9ef">print</span>(mdl<span style="color:#f92672">$</span>prior)
+<span style="color:#75715e">## setosa versicolor </span>
+<span style="color:#75715e">##    0.5        0.5 </span></code></pre></div>
+<p>3クラスでも確認してみます。大体おなじ。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#f92672">library</span>(MASS)
+mdl <span style="color:#f92672">&lt;-</span> lda(iris[,<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">4</span>],iris<span style="color:#f92672">$</span>Species)
+res <span style="color:#f92672">&lt;-</span> predict(mdl,iris[,<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">4</span>])
+
+<span style="color:#66d9ef">tail</span>(res<span style="color:#f92672">$</span><span style="color:#66d9ef">class</span>)
+<span style="color:#75715e">## [1] virginica virginica virginica virginica virginica virginica</span>
+<span style="color:#75715e">## Levels: setosa versicolor virginica</span>
+
+<span style="color:#75715e">## 3クラスなので2軸</span>
+<span style="color:#66d9ef">print</span>(mdl<span style="color:#f92672">$</span>scaling)
+<span style="color:#75715e">##                     LD1         LD2</span>
+<span style="color:#75715e">## Sepal.Length  0.8293776  0.02410215</span>
+<span style="color:#75715e">## Sepal.Width   1.5344731  2.16452123</span>
+<span style="color:#75715e">## Petal.Length -2.2012117 -0.93192121</span>
+<span style="color:#75715e">## Petal.Width  -2.8104603  2.83918785</span>
+
+<span style="color:#66d9ef">head</span>(res<span style="color:#f92672">$</span>x)
+<span style="color:#75715e">##           LD1        LD2</span>
+<span style="color:#75715e">## [1,] 8.061800  0.3004206</span>
+<span style="color:#75715e">## [2,] 7.128688 -0.7866604</span>
+<span style="color:#75715e">## [3,] 7.489828 -0.2653845</span>
+<span style="color:#75715e">## [4,] 6.813201 -0.6706311</span>
+<span style="color:#75715e">## [5,] 8.132309  0.5144625</span>
+<span style="color:#75715e">## [6,] 7.701947  1.4617210</span>
+
+<span style="color:#66d9ef">head</span>(res<span style="color:#f92672">$</span>posterior)
+<span style="color:#75715e">##      setosa   versicolor    virginica</span>
+<span style="color:#75715e">## [1,]      1 3.896358e-22 2.611168e-42</span>
+<span style="color:#75715e">## [2,]      1 7.217970e-18 5.042143e-37</span>
+<span style="color:#75715e">## [3,]      1 1.463849e-19 4.675932e-39</span>
+<span style="color:#75715e">## [4,]      1 1.268536e-16 3.566610e-35</span>
+<span style="color:#75715e">## [5,]      1 1.637387e-22 1.082605e-42</span>
+<span style="color:#75715e">## [6,]      1 3.883282e-21 4.566540e-40</span>
+
+<span style="color:#66d9ef">print</span>(mdl<span style="color:#f92672">$</span>prior)
+<span style="color:#75715e">##    setosa versicolor  virginica </span>
+<span style="color:#75715e">## 0.3333333  0.3333333  0.3333333 </span></code></pre></div>
+<h2 id="結果をプロットする">結果をプロットする</h2>
+
+<p>結果をプロットしてみます。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-R" data-lang="R"><span style="color:#f92672">library</span>(MASS)
+mdl <span style="color:#f92672">&lt;-</span> lda(iris[,<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">4</span>],iris<span style="color:#f92672">$</span>Species)
+res <span style="color:#f92672">&lt;-</span> predict(mdl,iris[,<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">4</span>])
+png(<span style="color:#e6db74">&#34;iris.png&#34;</span>,height<span style="color:#f92672">=</span><span style="color:#ae81ff">960</span>, width<span style="color:#f92672">=</span><span style="color:#ae81ff">960</span>, res<span style="color:#f92672">=</span><span style="color:#ae81ff">144</span>)
+plot(iris<span style="color:#f92672">$</span>Sepal.Length,iris<span style="color:#f92672">$</span>Sepal.Width,col<span style="color:#f92672">=</span>iris<span style="color:#f92672">$</span>Species,pch<span style="color:#f92672">=</span><span style="color:#66d9ef">as.numeric</span>(res<span style="color:#f92672">$</span><span style="color:#66d9ef">class</span>))
+
+<span style="color:#75715e">## 誤判別だけマーキング</span>
+miss.row <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">which</span>(res<span style="color:#f92672">$</span><span style="color:#66d9ef">class</span><span style="color:#f92672">!=</span>iris<span style="color:#f92672">$</span>Species)
+points(iris<span style="color:#f92672">$</span>Sepal.Length[miss.row],iris<span style="color:#f92672">$</span>Sepal.Width[miss.row],cex<span style="color:#f92672">=</span><span style="color:#ae81ff">2.3</span>,col<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;blue&#34;</span>,lwd<span style="color:#f92672">=</span><span style="color:#ae81ff">1.5</span>)
+
+leg <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">unique</span>(iris<span style="color:#f92672">$</span>Species)
+legend(<span style="color:#e6db74">&#34;topleft&#34;</span>,legend<span style="color:#f92672">=</span>leg,col<span style="color:#f92672">=</span>leg,pch<span style="color:#f92672">=</span><span style="color:#66d9ef">as.numeric</span>(leg))
+dev.off()</code></pre></div>
+<p><img src="/images/iris.png" alt="image" /></p>
+
+      </div>
+    </article>
+    <aside class="ph3 mt2 mt6-ns">
+      
+
+
+
+
+
+
+
+
+    </aside>
+  </div>
+
+    </main>
+    <footer class="bg-near-black bottom-0 w-100 pa3" role="contentinfo">
+  <div class="flex justify-between">
+  <a class="f4 fw4 hover-white no-underline white-70 dn dib-ns pv2 ph3" href="https://tasasei.github.io/mysite/" >
+    &copy; 2018 tasasei&#39;s site
+  </a>
+  
+
+
+
+
+
+
+
+
+  </div>
+</footer>
+
+    <script src="https://tasasei.github.io/mysite/dist/app.bundle.js" async></script>
+
+  </body>
+</html>
