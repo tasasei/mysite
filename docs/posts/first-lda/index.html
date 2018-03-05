@@ -9,7 +9,7 @@
     <meta name="MobileOptimized" content="320">
 
     <meta name="viewport" content="width=device-width,minimum-scale=1">
-    <meta name="generator" content="Hugo 0.32.3" />
+    <meta name="generator" content="Hugo 0.37" />
     
     
       <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
@@ -58,7 +58,8 @@ head(iris) ## Sepal.Length Sepal.Width Petal.Length Petal.Width Species ## 1 5.1
 
 
 <meta itemprop="keywords" content="" />
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Rのldaの使い方"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Rのldaの使い方"/>
 <meta name="twitter:description" content="先日 lda の使い方を説明する機会があったので、その時書いたものを晒します。 大した量は無いですが、無断使用OKと一応書いておきます。
 ldaを実行する R が標準で内蔵するライブラリの1つ、MASS に含まれる線形判別を行う関数である lda に ついて説明を行います。動作確認に使うのは iris (アヤメ) データ。 これもデフォルトで R に入ってます。こんなデータ↓
 head(iris) ## Sepal.Length Sepal.Width Petal.Length Petal.Width Species ## 1 5.1 3.5 1.4 0.2 setosa ## 2 4.9 3.0 1.4 0.2 setosa ## 3 4.7 3.2 1.3 0.2 setosa ## 4 4.6 3.1 1.5 0.2 setosa ## 5 5.0 3.6 1.4 0.2 setosa ## 6 5.4 3.9 1.7 0.4 setosa unique(iris$Species) ## [1] setosa versicolor virginica  ## Levels: setosa versicolor virginica nrow(iris) ## [1] 150 2クラスに絞ったirisデータをこのままldaに入れてみます。 実行して、出てきた変数を確認します。"/>
@@ -233,7 +234,7 @@ points(iris<span style="color:#f92672">$</span>Sepal.Length[miss.row],iris<span 
 leg <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">unique</span>(iris<span style="color:#f92672">$</span>Species)
 legend(<span style="color:#e6db74">&#34;topleft&#34;</span>,legend<span style="color:#f92672">=</span>leg,col<span style="color:#f92672">=</span>leg,pch<span style="color:#f92672">=</span><span style="color:#66d9ef">as.numeric</span>(leg))
 dev.off()</code></pre></div>
-<p><img src="/images/iris.png" alt="image" /></p>
+<p><img src="/mysite/images/iris.png" alt="image" /></p>
 
       </div>
     </article>
