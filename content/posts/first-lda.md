@@ -142,4 +142,4 @@ legend("topleft",legend=leg,col=leg,pch=as.numeric(leg))
 dev.off()
 ```
 
-![image](/images/iris.png)
+![image](/mysite/images/iris.png)
